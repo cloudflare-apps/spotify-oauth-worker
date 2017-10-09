@@ -47,7 +47,7 @@ module.exports = function setRoutes (app) {
 
     const auth = request.body.authentications.account.token
 
-    // Include link to Spotify Analytics Dashboard.
+    // Include link to Spotify player.
     install.links = [{
       title: 'Spotify',
       description: 'Visit Spotify to manage your playlists and followed artists.',
