@@ -1,25 +1,24 @@
-# Spotify OAuth Express
+# Spotify OAuth Express Client
 
 This is a Express service that fetches a user's Spotify playlists for
-the [Spotify](https://github.com/CloudflareApps/Spotify) app.
+the [Spotify](https://github.com/CloudflareApps/Spotify) app. Also sets metadata for the user
 
 ## Local Setup
 
 ### Requirements
 
-- Node 6.3.1+
 - Cloudflare account
 - Spotify account
 
-Fill in your credentials in _credentials.json_ from the
-[Spotify Developer Dashboard](https://developer.spotify.com/my-applications)
-
 ### Usage
 
-- `npm install`
-- `npm start`
+-  Save the contents of worker.js as a Cloudflare Worker
 
 ## Cloudflare Service Configuration
+**Cloudflare completes the OAuth dance and then sends the token to this client service. Steps on how to get this token**
+
+Fill in your credentials in _credentials.json_ from the
+[Spotify Developer Dashboard](https://developer.spotify.com/my-applications)
 
 After signing in with Cloudflare account,
 [create a new service](https://www.cloudflare.com/apps/services/new) with the following configuration.

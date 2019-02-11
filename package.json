@@ -6,11 +6,6 @@
     "node": "6.3.1"
   },
   "private": true,
-  "main": "app/create-app.js",
-  "scripts": {
-    "start": "node app/development.js",
-    "start:heroku": "node app/heroku.js"
-  },
   "dependencies": {
     "body-parser": "1.17.1",
     "express": "4.13.3",
