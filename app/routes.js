@@ -1,11 +1,11 @@
-const getJson = async function(url) {
+const getJson = async function (url) {
   let response = await fetch(url);
   return response.json();
 };
 const DEFAULT_PLAYLIST_SCHEMA = {
   enum: ["custom"],
   enumNames: {
-    custom:  "Choose a playlist from a URI..."
+    custom: "Choose a playlist from a URI..."
   }
 };
 
@@ -46,7 +46,7 @@ async function handleRequest(request) {
     // Primary OAuth request handler.
     // This handler fetches the user's Spotify playlists and followed artists,
     // then populates an install field with the entries.
-    ret = app.post("/", async function(request) {
+    ret = app.post("/", async function (request) {
       body = await request.json();
       const { install } = body;
       // return new Response(JSON.stringify({ install, proceed: true }))
@@ -167,10 +167,10 @@ async function handleRequest(request) {
 
     // Account metadata handler.
     // This handler fetches user info and populates the login entry with user's info.
-    ret = app.get("/account-metadata", function(request) {
+    ret = app.get("/account-metadata", function (request) {
       return fetch("https://api.spotify.com/v1/me", {
         headers: {
-          authorization: request.headers.authorization
+          authorization: request.headers.get("authorization")
         }
       })
         .catch(error => {
@@ -181,7 +181,16 @@ async function handleRequest(request) {
             })
           );
         })
+        .then(res => res.json())
         .then(res => {
+          if (res.error) {
+            return new Response(
+              JSON.stringify({
+                proceed: false,
+                errors: [{ type: "400", message: JSON.stringify(res.error) }]
+              })
+            )
+          }
           return new Response(
             JSON.stringify({
               metadata: {
@@ -196,7 +205,7 @@ async function handleRequest(request) {
     if (ret) {
       return ret;
     }
-    ret = app.get("/healthcheck", function(request, response) {
+    ret = app.get("/healthcheck", function (request, response) {
       return new Response(200);
     });
     if (ret) {
