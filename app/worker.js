@@ -11,7 +11,7 @@ const DEFAULT_PLAYLIST_SCHEMA = {
 const DEFAULT_ARTIST_SCHEMA = {
   enum: ["custom"],
   enumNames: {
-    custom: "Choose an artist (from woerker) from a URI..."
+    custom: "Choose an artist from a URI..."
   }
 };
 
