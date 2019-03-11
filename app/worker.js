@@ -96,8 +96,9 @@ async function handleRequest(request) {
       });
       return new Response(JSON.stringify({ install, proceed: true }));
     }
+    let auth = ''
     try {
-      const auth = body.authentications.account.token;
+      auth = body.authentications.account.token;
     } catch (error) {
       return new Response(
         JSON.stringify({
@@ -194,10 +195,10 @@ async function handleRequest(request) {
   if (ret) {
     return ret;
   }
-/**
- * Account metadata handler.
- * This handler fetches user info and populates the login entry with user's info.
-  */
+  /**
+   * Account metadata handler.
+   * This handler fetches user info and populates the login entry with user's info.
+    */
   ret = app.get("/account-metadata", function (request) {
     return fetch("https://api.spotify.com/v1/me", {
       headers: {
