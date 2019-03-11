@@ -1,6 +1,6 @@
-# Spotify OAuth Express Client
+# Spotify OAuth Workers Client
 
-This is a Express service that fetches a user's Spotify playlists for
+This is a workers service that fetches a user's Spotify playlists for
 the [Spotify](https://github.com/CloudflareApps/Spotify) app. Also sets metadata for the user
 
 ## Local Setup
