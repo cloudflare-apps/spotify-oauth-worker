@@ -1,3 +1,10 @@
+"use strict";
+/**
+ * @typedef Item
+ * @property {string} uri
+ * @property {string} name
+ */
+
 /**
  * Constants
  */
@@ -22,12 +29,14 @@ addEventListener("fetch", event => {
   return event.respondWith(
     handleRequest(event.request)
       .then(resp => resp)
-      .catch(error => new Response(
-        JSON.stringify({
-          proceed: false,
-          errors: [{ type: "400", message: error.message }]
-        })
-      ))
+      .catch(error => {
+        return new Response(
+          JSON.stringify({
+            proceed: false,
+            errors: [{ type: "400", message: error.message }]
+          })
+        );
+      })
   );
 });
 
@@ -37,9 +46,14 @@ addEventListener("fetch", event => {
  * @param {Request} request
  */
 async function handleRequest(request) {
-  app = {
+  const app = {
+    /**
+     * @param {string} endpoint
+     * @param {(req: Request) => Response|Promise<Response>} fn
+     * @return {Promise<Response>|Response|null}
+     */
     get: (endpoint, fn) => {
-      url = new URL(request.url);
+      const url = new URL(request.url);
       if (
         (url.pathname == "/spotify" || url.pathname == "/spotify/") &&
         request.method === "GET"
@@ -49,8 +63,13 @@ async function handleRequest(request) {
         return fn(request);
       return null;
     },
+    /**
+     * @param {string} endpoint
+     * @param {(req: Request) => Response|Promise<Response>} fn
+     * @return {Promise<Response>|Response|null}
+     */
     post: (endpoint, fn) => {
-      url = new URL(request.url);
+      const url = new URL(request.url);
       if (
         (url.pathname == "/spotify" || url.pathname == "/spotify/") &&
         request.method === "POST"
@@ -65,11 +84,13 @@ async function handleRequest(request) {
   // ret is the return path the request hits
   let ret = null;
 
-  // Primary OAuth request handler.
-  // This handler fetches the user's Spotify playlists and followed artists,
-  // then populates an install field with the entries.
-  ret = app.post("/", async function (request) {
-    body = await request.json();
+  /**
+   * Primary OAuth request handler.
+   * This handler fetches the user's Spotify playlists and followed artists,
+   * then populates an install field with the entries.
+   */
+  ret = app.post("/", async request => {
+    const body = await request.json();
     const { install } = body;
 
     if (!body.metadata.newValue) {
@@ -96,7 +117,7 @@ async function handleRequest(request) {
       });
       return new Response(JSON.stringify({ install, proceed: true }));
     }
-    let auth = ''
+    let auth = "";
     try {
       auth = body.authentications.account.token;
     } catch (error) {
@@ -129,6 +150,7 @@ async function handleRequest(request) {
         return res.json();
       })
       .then(res => {
+        /** @type {{items:Item[]}} */
         const { items = [] } = res;
         const playlistSchema = Object.assign({}, DEFAULT_PLAYLIST_SCHEMA);
 
@@ -158,6 +180,7 @@ async function handleRequest(request) {
     )
       .then(res => res.json())
       .then(res => {
+        /** @type {{items:Item[]}} */
         const { items = [] } = res.artists;
         const artistSchema = Object.assign({}, DEFAULT_ARTIST_SCHEMA);
 
@@ -198,8 +221,8 @@ async function handleRequest(request) {
   /**
    * Account metadata handler.
    * This handler fetches user info and populates the login entry with user's info.
-    */
-  ret = app.get("/account-metadata", function (request) {
+   */
+  ret = app.get("/account-metadata", async request => {
     return fetch("https://api.spotify.com/v1/me", {
       headers: {
         authorization: request.headers.get("authorization")
@@ -237,8 +260,8 @@ async function handleRequest(request) {
   if (ret) {
     return ret;
   }
-  ret = app.get("/healthcheck", function (request, response) {
-    return new Response(200);
+  ret = app.get("/healthcheck", request => {
+    return new Response(null, { status: 200 });
   });
   if (ret) {
     return ret;
@@ -247,7 +270,12 @@ async function handleRequest(request) {
   return new Response(
     JSON.stringify({
       proceed: false,
-      errors: [{ type: "route-not-found", message: "route not defined on worker " + request.url }]
+      errors: [
+        {
+          type: "route-not-found",
+          message: "route not defined on worker " + request.url
+        }
+      ]
     })
   );
 }

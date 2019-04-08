@@ -2,21 +2,13 @@
   "name": "spotify-express-oauth-express",
   "version": "1.0.0",
   "description": "A Cloudflare service that fetches a user's Spotify playlists.",
-  "engines": {
-    "node": "6.3.1"
-  },
+  "license": "MIT",
   "private": true,
-  "dependencies": {
-    "body-parser": "1.17.1",
-    "express": "4.13.3",
-    "simple-fetch": "^1.5.0"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CloudflareApps/SpotifyOAuthExpress"
+    "url": "https://github.com/cloudflare-apps/spotify-oauth-worker"
   },
-  "license": "MIT",
   "devDependencies": {
-    "standard": "10.0.2"
+    "prettier": "^1.16.4"
   }
 }
