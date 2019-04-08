@@ -35,7 +35,7 @@ addEventListener("fetch", event => {
             proceed: false,
             errors: [{ type: "400", message: error.message }]
           })
-        )
+        );
       })
   );
 });
@@ -117,7 +117,7 @@ async function handleRequest(request) {
       });
       return new Response(JSON.stringify({ install, proceed: true }));
     }
-    let auth = ''
+    let auth = "";
     try {
       auth = body.authentications.account.token;
     } catch (error) {
@@ -261,7 +261,7 @@ async function handleRequest(request) {
     return ret;
   }
   ret = app.get("/healthcheck", request => {
-    return new Response(null, {status: 200});
+    return new Response(null, { status: 200 });
   });
   if (ret) {
     return ret;
@@ -270,7 +270,12 @@ async function handleRequest(request) {
   return new Response(
     JSON.stringify({
       proceed: false,
-      errors: [{ type: "route-not-found", message: "route not defined on worker " + request.url }]
+      errors: [
+        {
+          type: "route-not-found",
+          message: "route not defined on worker " + request.url
+        }
+      ]
     })
   );
 }
